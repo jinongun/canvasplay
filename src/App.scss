@@ -10,11 +10,12 @@
 
 
 .canvasWrap{
-  width: 1200px;
-  height: 800px;
+  width: 512px;
+  height: 512px;
   position: relative;
-
+  border: 16px solid #61dbfb;
   canvas{
     position: absolute;
+    cursor: crosshair;
   }
 }

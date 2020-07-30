@@ -2,13 +2,18 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.scss';
 import Palette from 'components/Palette';
+import ColorPicker from 'components/ColorPicker';
 
-
-const width = 8;
-const color = '#000';
+const CANVAS_W = 512;
+const CANVAS_H = 512;
+const BORDER_COLOR = 'rgba(196,196,196,1)'
+const width = 16;
 function App() {
-  const lineRef = React.useRef<any>(null)
+  const [{x,y}, setCoords] = React.useState({x:-1, y:-1});
+  const [color, setColor] = React.useState('black');
+  const lineRef = React.useRef<any>(null);
   const canvasRef = React.useRef<any>(null);
+  const originRef = React.useRef<any>(null);
   let pos = {
     drawable: false,
     X: -1,
@@ -27,22 +32,48 @@ function App() {
   const draw = (e:any)=>{
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
+    const origin = originRef.current;
+    const otx = origin.getContext('2d');
     if(pos.drawable){
       pos = { ...pos, ...getPosition(e.nativeEvent)}
-      // ctx.strokeStyle = "#ff0000";
-      // ctx.lineCap = 'round';
 
-      // ctx.lineTo(pos.X,pos.Y);
-      // ctx.lineWidth=10;
-      // ctx.stroke();
-      ctx.fillRect(  ~~(pos.X/width) * width, ~~(pos.Y/width)*width, width, width);
+      if(color === 'transparent'){
+        ctx.clearRect(~~(pos.X/width) * width, ~~(pos.Y/width) * width, width, width);
+        otx.clearRect(  ~~(pos.X/width) * width / 8 , ~~(pos.Y/width) * width / 8, 2, 2);
+  
+      }else{
+        ctx.fillStyle=color;
+        ctx.fillRect(  ~~(pos.X/width) * width, ~~(pos.Y/width)*width, width, width);
+  
+        otx.fillStyle=color;
+        otx.fillRect(  ~~(pos.X/width) * width / 8 , ~~(pos.Y/width) * width / 8, 2, 2);
+      }
+
     }
   }
   const dot = (e:any)=>{
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
+    const origin = originRef.current;
+    const otx = origin.getContext('2d');
+
     pos = { ...pos, ...getPosition(e.nativeEvent)}
-    ctx.fillRect(  ~~(pos.X/width) * width, ~~(pos.Y/width)*width, width, width);
+    if(color === 'transparent'){
+      ctx.clearRect(~~(pos.X/width) * width, ~~(pos.Y/width) * width, width, width);
+      otx.clearRect(  ~~(pos.X/width) * width / 8 , ~~(pos.Y/width) * width / 8, 2, 2);
+
+    }else{
+      ctx.fillStyle=color;
+      ctx.fillRect(  ~~(pos.X/width) * width, ~~(pos.Y/width) * width, width, width);
+      setCoords({x:pos.X, y:pos.Y});
+      otx.fillStyle=color;
+      otx.fillRect(  ~~(pos.X/width) * width / 8 , ~~(pos.Y/width) * width / 8, 2, 2);
+    }
+
+
+    // ctx.strokeStyle = "rgba(128,128,128,1)";
+    // ctx.strokeRect(~~(pos.X/width) * width, ~~(pos.Y/width)*width, width, width);
+
 
 
   }
@@ -54,39 +85,40 @@ function App() {
   }
   function drawBoard(){
     const canvas = lineRef.current;
-
-
     const ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = false;
     ctx.mozImageSmoothingEnabled =false;
     ctx.webkitImageSmoothingEnabled = false;
     ctx.msImageSmoothingEnabled = false;
-    // var imageObj1 = new Image();
-    // imageObj1.src = 'https://bonanzagolfcourse.com/wp-content/uploads/2020/04/HOTEL_8-400x400-pixels.jpg'
+    for(let x = 0; x <= CANVAS_W; x+=width){
+      for(let y = 0; y <= CANVAS_H; y+=width){
 
-      for (var x = 0; x <= 1200; x += width) {
-          ctx.moveTo(0.5 + x + 0, 0);
-          ctx.lineTo(0.5 + x + 0, 800 + 0);
+        if(x/width %2=== 1 && y/width % 2 ===1){
+          ctx.fillStyle="white";
+        }else if(x/width % 2 === 0  && y/width % 2 ===0){
+          ctx.fillStyle="white";
+        }
+        else{
+          ctx.fillStyle="#f0f0f0"
+        }
+        ctx.fillRect(x,y,width,width);
       }
-  
-      for (var x = 0; x <= 800; x += width) {
-          ctx.moveTo(0, 0.5 + x + 0);
-          ctx.lineTo(1200 + 0, 0.5 + x + 0);
-      }
-      ctx.strokeStyle = "rgba(128,128,128,0.5)";
-      ctx.stroke();
-
-}
+    }
+  }
   return (
     <div className="App">
       <div className="canvasWrap">
-      <canvas ref={lineRef} style={{background: 'white'}} width={1200} height={800} />
-
-        <canvas onMouseDown={init} style={{background: 'transparent'}} onMouseMove={draw} onClick={dot}  onMouseUp={finishDraw} ref={canvasRef} width={1200} height={800} />
-     
+        <canvas ref={lineRef} style={{background: 'white'}} width={CANVAS_W} height={CANVAS_H} />
+        <canvas onMouseDown={init} style={{background: 'transparent'}} onMouseMove={draw} onClick={dot}  onMouseUp={finishDraw} ref={canvasRef} width={CANVAS_W} height={CANVAS_H} />
       </div>
-      
-      <Palette />
+
+      <Palette setColor={setColor} color={color} />
+      <div>
+      <canvas style={{background: 'white'}} width={CANVAS_W/width} height={CANVAS_H/width} />
+      <canvas ref={originRef} style={{background: 'white', border: '2px solid #61dbfb'}} width={CANVAS_W/width *2} height={CANVAS_H/width *2} />
+
+      </div>
+      <ColorPicker />
     </div>
   );
 }

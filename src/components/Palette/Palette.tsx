@@ -7,7 +7,7 @@ interface Props{
   [key: string]: any;
 }
 
-const MAX = 5;
+const MAX = 10;
 
 export default function Palette(props:Props){
   const [locked, setLocked] = React.useState<any>({});
@@ -34,9 +34,12 @@ export default function Palette(props:Props){
   function reset(){
     setColors([...Object.keys(locked), ...generateColor(MAX - Object.keys(locked).length)]);
     setSelected(null);
+    props.setColor('transparent');
+
   }
   function select(idx:number){
     setSelected(idx);
+    props.setColor(colors[idx]);
   }
   return (
     <div className="Palette">
@@ -44,9 +47,7 @@ export default function Palette(props:Props){
         <button onClick={reset}>
           <FaRedoAlt />
         </button>
-        <span>3/3</span>
       </div>
-
       {
         colors.map((color:string, index: number)=>{
           return <Color onClick={()=>select(index)} lock={()=>lock(color)} color={color} key={index} locked={locked[color]} selected={selected === index} />
