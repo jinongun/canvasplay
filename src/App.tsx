@@ -112,7 +112,7 @@ function App() {
         <canvas onMouseDown={init} style={{background: 'transparent'}} onMouseMove={draw} onClick={dot}  onMouseUp={finishDraw} ref={canvasRef} width={CANVAS_W} height={CANVAS_H} />
       </div>
 
-      <Palette setColor={setColor} color={color} />
+      {/* <Palette setColor={setColor} color={color} /> */}
       <div>
       <canvas style={{background: 'white'}} width={CANVAS_W/width} height={CANVAS_H/width} />
       <canvas ref={originRef} style={{background: 'white', border: '2px solid #61dbfb'}} width={CANVAS_W/width *2} height={CANVAS_H/width *2} />
