@@ -6,7 +6,11 @@ export default function ColorPicker(props:any){
 
   const colorPicker = React.useRef<any>(null);
   const [rgb , setRgb] = React.useState<any>({r:255,g:0,b:0});
-  const [selected, setSelected] = React.useState<any>('rgb(255,0,0)');
+  const [ lightness, setLightness ] = React.useState(0.5);
+  const [ saturation, setSaturation] = React.useState(0.5);
+  const [baseColor, setBaseColor] = React.useState<any>({r:255,g:128,b:0});
+  const [resultColor, setResultColor] = React.useState<any>(baseColor);
+
   React.useEffect(()=>{
     const canvas = colorPicker.current;
     const ctx = canvas.getContext('2d');
@@ -17,6 +21,31 @@ export default function ColorPicker(props:any){
     let sy = center_y;
     colorGenerate(center_x,center_y,sx,sy);
   },[]);
+
+  React.useEffect(()=>{
+    let answer = {...baseColor};
+    const gap = {
+      r: 255 - baseColor.r,
+      g: 255 - baseColor.g,
+      b: 255 - baseColor.b,
+    };
+
+    //채도 적용
+    answer ={
+      r: answer.r + (1 - saturation) * gap.r,
+      g: answer.g + ( 1 - saturation) * gap.g,
+      b: answer.b + (1 - saturation) * gap.b
+    }
+
+    //명도 적용
+    answer = {
+      r: answer.r * (lightness),
+      g: answer.g * (lightness),
+      b: answer.b * (lightness)
+    }
+    setResultColor(answer);
+  
+  },[lightness,saturation, baseColor]);
 
   function colorGenerate(center_x:number, center_y:number, sx:number, sy:number){
     const canvas = colorPicker.current;
@@ -49,41 +78,49 @@ export default function ColorPicker(props:any){
     y = e.nativeEvent.pageY - canvas.offsetTop,   
     pixel = canvas.getContext("2d").getImageData(x, y, 1, 1).data,
     pixelColor = "rgb(" + pixel[0] + ", " + pixel[1]+", "+ pixel[2]+ ")";
-    setRgb({
+    setBaseColor({
       r: pixel[0],
       g: pixel[1],
       b: pixel[2],
     })
     console.log(pixelColor);
-    setSelected(pixelColor);
+    // setResultColor({
+    //   r: pixel[0],
+    //   g: pixel[1],
+    //   b: pixel[2],
+    // });
   }
+
   return (
     <div className="ColorPicker">
       <canvas onMouseDown={selectColor} ref={colorPicker} width={200} height={200} />
-      <div style={{background: `rgb(${rgb.r},${rgb.g}, ${rgb.b})`, width: 30, height: 30}} /> 
+      <div style={{ color: 'red',fontSize: '10px',background: `rgb(${resultColor.r},${resultColor.g}, ${resultColor.b})`, width: 24, height: 24}} >
+      </div> 
       <div>
-        <ColorRangeBar start={'rgb(255,255,255)'} selected={selected} setSelected={setSelected} />
-        <ColorRangeBar start={'rgb(0,0,0)'} selected={selected} setSelected={setSelected} />
-
+        <ColorRangeBar title="Saturation" setValue={setSaturation} value={saturation} start={`rgb(255,255,255)`} end={`rgb(${baseColor.r},${baseColor.g},${baseColor.b})`} />
+        <ColorRangeBar title="Lightness" setValue={setLightness} value={lightness} start={`rgb(0,0,0)`} end={`rgb(${baseColor.r},${baseColor.g},${baseColor.b})`}/>
       </div>
     </div>
   )
 } 
 
+
+
+
 function ColorRangeBar(props:any){
-
+  const { setValue } = props;
   function handleChange(e:any){
-    console.log(props.selected);
-    console.log(~~(e.target.value * 255));
-    props.setSelected(`rgb(255,${255-~~(e.target.value * 255)},${255-~~(e.target.value * 255)})`)
-
+    const val = Number(Number(e.target.value).toFixed(2));
+    setValue(val);
   }
   return (
     <>
-    <p style={{margin: 0}}>TITLE</p>
+    <p className="title">
+      {props.title || 'default'}
+    </p>
     <div className="ColorRangeBar">
-        <span className="bar"  style={{background: `linear-gradient(to right, ${props.start} 0%, ${props.selected} 100%)`}} />
-        <input type="range" defaultValue={1} min={0} max={1} step="any" onChange={handleChange} />
+        <span className="bar"  style={{background: `linear-gradient(to right, ${props.start} 0%, ${props.end} 100%)`}} />
+        <input type="range" defaultValue={1} value={props.value} min={0} max={1} step="any" onChange={handleChange} />
     </div>
     </>
   )

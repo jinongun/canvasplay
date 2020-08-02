@@ -53,11 +53,15 @@
 
 // }
 
+.title{
+  color: white;
+  margin: 0;
+}
 .ColorRangeBar{
   width: 240px;
   position: relative;
   padding: 4px 8px;
-
+  
   .bar{
     display: block;
     width: 100%;
