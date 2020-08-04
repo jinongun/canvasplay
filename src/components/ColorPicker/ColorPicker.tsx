@@ -1,8 +1,10 @@
 import React from 'react';
 import './ColorPicker.scss';
+import { ColorContext } from 'contexts/useColorContext';
 
 
 export default function ColorPicker(props:any){
+  const color = React.useContext(ColorContext);
 
   const colorPicker = React.useRef<any>(null);
   const [rgb , setRgb] = React.useState<any>({r:255,g:0,b:0});

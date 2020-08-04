@@ -3,11 +3,15 @@ import logo from './logo.svg';
 import './App.scss';
 import Palette from 'components/Palette';
 import ColorPicker from 'components/ColorPicker';
+import { ColorContext } from './contexts/useColorContext';
 
 const CANVAS_W = 512;
 const CANVAS_H = 512;
 const BORDER_COLOR = 'rgba(196,196,196,1)'
 const width = 16;
+
+
+
 function App() {
   const [{x,y}, setCoords] = React.useState({x:-1, y:-1});
   const [color, setColor] = React.useState('black');
@@ -106,20 +110,23 @@ function App() {
     }
   }
   return (
-    <div className="App">
-      <div className="canvasWrap">
-        <canvas ref={lineRef} style={{background: 'white'}} width={CANVAS_W} height={CANVAS_H} />
-        <canvas onMouseDown={init} style={{background: 'transparent'}} onMouseMove={draw} onClick={dot}  onMouseUp={finishDraw} ref={canvasRef} width={CANVAS_W} height={CANVAS_H} />
-      </div>
+    <ColorContext.Provider value={"#000000"}>
+      <div className="App">
+        <div className="canvasWrap">
+          <canvas ref={lineRef} style={{background: 'white'}} width={CANVAS_W} height={CANVAS_H} />
+          <canvas onMouseDown={init} style={{background: 'transparent'}} onMouseMove={draw} onClick={dot}  onMouseUp={finishDraw} ref={canvasRef} width={CANVAS_W} height={CANVAS_H} />
+        </div>
 
-      {/* <Palette setColor={setColor} color={color} /> */}
-      <div>
-      <canvas style={{background: 'white'}} width={CANVAS_W/width} height={CANVAS_H/width} />
-      <canvas ref={originRef} style={{background: 'white', border: '2px solid #61dbfb'}} width={CANVAS_W/width *2} height={CANVAS_H/width *2} />
+        {/* <Palette setColor={setColor} color={color} /> */}
+        <div>
+        <canvas style={{background: 'white'}} width={CANVAS_W/width} height={CANVAS_H/width} />
+        <canvas ref={originRef} style={{background: 'white', border: '2px solid #61dbfb'}} width={CANVAS_W/width *2} height={CANVAS_H/width *2} />
 
+        </div>
+        <ColorPicker />
       </div>
-      <ColorPicker />
-    </div>
+    </ColorContext.Provider>
+
   );
 }
 
