@@ -1,0 +1,12 @@
+
+.DrawBoard{
+  position: relative;
+  .background{
+    position: absolute;
+  } 
+  .canvas{
+    position: relative;
+    z-index: 2;
+    background:transparent;
+  }
+}
