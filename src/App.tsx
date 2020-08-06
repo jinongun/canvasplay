@@ -113,7 +113,11 @@ function App() {
   return (
     <ColorContext.Provider value={"#000000"}>
       <div className="App">
-        <DrawBoard />
+        <div className="wrapper">
+          <DrawBoard />
+          <ColorPicker />
+
+        </div>
         {/* <div className="canvasWrap" style={{display: 'none'}}>
           <canvas ref={lineRef} style={{background: 'white'}} width={CANVAS_W} height={CANVAS_H} />
           <canvas onMouseDown={init} style={{background: 'transparent'}} onMouseMove={draw} onClick={dot}  onMouseUp={finishDraw} ref={canvasRef} width={CANVAS_W} height={CANVAS_H} />
@@ -125,7 +129,6 @@ function App() {
           <canvas ref={originRef} style={{background: 'white', border: '2px solid #61dbfb'}} width={CANVAS_W/width *2} height={CANVAS_H/width *2} />
 
         </div> */}
-        <ColorPicker />
       </div>
     </ColorContext.Provider>
 
