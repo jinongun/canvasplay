@@ -3,13 +3,24 @@
 .ColorPicker{
   box-sizing: border-box;
   display: flex;
-
+  
   
   padding: 8px;
   //background: red;
   //border: 2px solid gray;
-  canvas{
-    background: transparent;
+  // canvas{
+  //   background: transparent;
+  // }
+  .wrap{
+    position: relative;
+    canvas{
+      position: absolute;
+    }
+    .canvas{
+      position: relative;
+      z-index: 2;
+
+    }
   }
 
   .config{

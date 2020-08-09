@@ -96,8 +96,7 @@ export default function ColorPicker(props:any){
   return (
     <div className="ColorPicker">
       <canvas onMouseDown={selectColor} ref={colorPicker} width={200} height={200} />
-      <div style={{ color: 'red',fontSize: '10px',background: `rgb(${resultColor.r},${resultColor.g}, ${resultColor.b})`, width: 24, height: 24}} >
-      </div> 
+
       <div>
         <ColorRangeBar title="Saturation" setValue={setSaturation} value={saturation} start={`rgb(255,255,255)`} end={`rgb(${baseColor.r},${baseColor.g},${baseColor.b})`} />
         <ColorRangeBar title="Lightness" setValue={setLightness} value={lightness} start={`rgb(0,0,0)`} end={`rgb(${baseColor.r},${baseColor.g},${baseColor.b})`}/>

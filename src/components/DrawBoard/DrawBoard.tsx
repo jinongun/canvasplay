@@ -19,7 +19,7 @@ const defaultProps = {
     width: 8
   }
 };
-export default function DrawBoard({pointer = {color: "#ff0000",width: 16}, canvas = {width: 512, height: 512}}:Props){
+export default function DrawBoard({pointer = {color: "rgba(255,0,0,0.1)",width: 16}, canvas = {width: 512, height: 512}}:Props){
 
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
   const backgroundRef = React.useRef<any>(null);

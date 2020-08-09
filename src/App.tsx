@@ -5,6 +5,7 @@ import Palette from 'components/Palette';
 import ColorPicker from 'components/ColorPicker';
 import { ColorContext } from './contexts/useColorContext';
 import DrawBoard from 'components/DrawBoard';
+import { SquareColorPicker } from 'components/ColorPicker/SquareColorPicker';
 
 const CANVAS_W = 512;
 const CANVAS_H = 512;
@@ -116,7 +117,7 @@ function App() {
         <div className="wrapper">
           <DrawBoard />
           <ColorPicker />
-
+          {/* <SquareColorPicker /> */}
         </div>
         {/* <div className="canvasWrap" style={{display: 'none'}}>
           <canvas ref={lineRef} style={{background: 'white'}} width={CANVAS_W} height={CANVAS_H} />
