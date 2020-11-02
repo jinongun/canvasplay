@@ -1,3 +1,0 @@
-export {
-  ColorContext
-} from "./useColorContext";
