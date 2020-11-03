@@ -17,12 +17,38 @@ export class Wave{
   }
 
   draw(ctx){
-    console.log('draw')
     ctx.beginPath();
-    ctx.fillStyle = '#ff0000';
+    ctx.fillStyle = 'red';
     this.point.update();
-
-    ctx.arc(this.point.x, this.point.y, 10, 0, 2*Math.PI);
+    ctx.arc(this.point.x, this.point.y, 5, 0, 2*Math.PI);
+    ctx.fill();
+  }
+  drawX(ctx){
+    ctx.beginPath();
+    ctx.fillStyle = 'blue';
+    this.point.updateX();
+    ctx.arc(this.point.x, this.point.y, 5, 0, 2*Math.PI);
+    ctx.fill();
+  }
+  drawL2R(ctx){
+    ctx.beginPath();
+    ctx.fillStyle = 'green';
+    this.point.updateL2R();
+    ctx.arc(this.point.x, this.point.y, 5, 0, 2*Math.PI);
+    ctx.fill();
+  }
+  drawR2L(ctx){
+    ctx.beginPath();
+    ctx.fillStyle = 'black';
+    this.point.updateR2L();
+    ctx.arc(this.point.x, this.point.y, 5, 0, 2*Math.PI);
+    ctx.fill();
+  }
+  circle(ctx){
+    ctx.beginPath();
+    ctx.fillStyle = 'yellow';
+    this.point.circle();
+    ctx.arc(this.point.x, this.point.y, 5, 0, 2*Math.PI);
     ctx.fill();
   }
 }
